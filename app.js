@@ -165,11 +165,7 @@ function handleApiAiResponse(sender, response) {
 	let parameters = response.result.parameters;
 
 	sendTypingOff(sender);
-	if (responseText == '' && !isDefined(action)) {
-		//api ai could not evaluate input.
-		console.log('Unknown query' + response.result.resolvedQuery);
-		sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
-	} else if (isDefined(action)) {
+    if (isDefined(action)) {
 		handleApiAiAction(sender, action, responseText, contexts, parameters);
 	}
 }
