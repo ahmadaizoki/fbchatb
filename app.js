@@ -196,6 +196,7 @@ function handleMessage(message, sender) {
 	switch (message.type) {
 		case 0: //text
 			sendTextMessage(sender, message.speech);
+            sendTextMessage(sender,"Ahmad");
 			break;
 		case 2: //quick replies
 			let replies = [];
@@ -207,7 +208,6 @@ function handleMessage(message, sender) {
 					"payload": message.replies[b]
 				}
 				replies.push(reply);
-				replies.push('ahmad');
 			}
 			sendQuickReply(sender, message.title, replies);
 			break;
