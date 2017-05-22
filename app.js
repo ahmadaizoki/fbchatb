@@ -678,7 +678,7 @@ function greetUserText(userId) {
  * get the message id in a response 
  *
  */
-/*function callSendAPI(messageData) {
+function callSendAPI(messageData) {
 	request({
 		uri: 'https://graph.facebook.com/v2.6/me/messages',
 		qs: {
@@ -703,7 +703,7 @@ function greetUserText(userId) {
 			console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
 		}
 	});
-}*/
+}
 
 
 
