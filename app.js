@@ -197,7 +197,7 @@ function handleMessage(message, sender) {
 		case 0: //text
 			sendTextMessage(sender, message.speech);
 			break;
-		case 2: //quick replies
+		/*case 2: //quick replies
 			let replies = [];
 			for (var b = 0; b < message.replies.length; b++) {
 				let reply =
@@ -225,7 +225,7 @@ function handleMessage(message, sender) {
 
 			callSendAPI(messageData);
 
-			break;
+			break;*/
 	}
 }
 
