@@ -868,7 +868,7 @@ function isDefined(obj) {
 	return obj != null;
 }
 
-function parseExcel(xlsxtojson) {
+function parseExcel(req,res) {
     xlsxtojson({
         input: config.fichier,
         output: "output.json",
