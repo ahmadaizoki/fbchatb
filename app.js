@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
 const uuid = require('uuid');
-const xlsxtojson = require("xlsx-to-json-lc");
+const xlsxtojson = require('xlsx-to-json-lc');
 
 
 // Messenger API parameters
@@ -35,10 +35,14 @@ app.set('port', (process.env.PORT || 5000))
 xlsxtojson({
     input: config.fichier,
     output: "output.json",
-    lowerCaseHeaders: true
+    lowerCaseHeaders:true
+}, function(err,result){
+    if(err) {
+        return res.json({data: null});
+    }
 });
 
-const exjson=require('./output');
+
 
 //verify request came from facebook
 app.use(bodyParser.json({
@@ -168,10 +172,11 @@ function handleApiAiResponse(sender, response) {
 	let action = response.result.action;
 	let contexts = response.result.contexts;
 	let parameters = response.result.parameters;
+	const exjson=require('./output');
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, 'Ahmad', contexts, parameters);
+		handleApiAiAction(sender, action, /*'Ahmad'*/exjson.personne, contexts, parameters);
 	}
 }
 
