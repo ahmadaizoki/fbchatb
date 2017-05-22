@@ -4,4 +4,5 @@ module.exports = {
     API_AI_CLIENT_ACCESS_TOKEN: 'fe9c0f54c86e43cfa4a27e046f1e8222',
     FB_APP_SECRET: '0d75d416dee94b9d1ea0ce2fb84b0349',
     SERVER_URL: "https://fbchatb.herokuapp.com/",
+    fichier:'Exemple.xlsx',
 };

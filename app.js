@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
 const uuid = require('uuid');
+const xlsxtojson = require("xlsx-to-json-lc");
 
 
 // Messenger API parameters
@@ -82,6 +83,7 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
 	var data = req.body;
 	console.log(JSON.stringify(data));
+	parseExcel();
 
 
 
@@ -864,6 +866,19 @@ function isDefined(obj) {
 	}
 
 	return obj != null;
+}
+
+function parseExcel(req,res) {
+    xlsxtojson({
+        input: config.fichier,
+        output: "output.json",
+        //sheet: "Digital_Service_Stephane",
+        lowerCaseHeaders: true
+    }, function (err, result) {
+        if (err) {
+            return res.json({data: null});
+        }
+    });
 }
 
 // Spin up the server
