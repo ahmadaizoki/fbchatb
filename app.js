@@ -148,14 +148,6 @@ function receivedMessage(event) {
 	var messageAttachments = message.attachments;
 	var quickReply = message.quick_reply;
 
-	/*if (isEcho) {
-		handleEcho(messageId, appId, metadata);
-		return;
-	} else if (quickReply) {
-		handleQuickReply(senderID, quickReply, messageId);
-		return;
-	}*/
-
 
 	if (messageText) {
 		//send message to api.ai
@@ -197,76 +189,8 @@ function handleMessage(message, sender) {
 		case 0: //text
 			sendTextMessage(sender, message.speech);
 			break;
-		/*case 2: //quick replies
-			let replies = [];
-			for (var b = 0; b < message.replies.length; b++) {
-				let reply =
-				{
-					"content_type": "text",
-					"title": message.replies[b],
-					"payload": message.replies[b]
-				}
-				replies.push(reply);
-			}
-			sendQuickReply(sender, message.title, replies);
-			break;
-		case 3: //image
-			sendImageMessage(sender, message.imageUrl);
-			break;
-		case 4:
-			// custom payload
-			var messageData = {
-				recipient: {
-					id: sender
-				},
-				message: message.payload.facebook
-
-			};
-
-			callSendAPI(messageData);
-
-			break;*/
 	}
 }
-
-
-/*function handleCardMessages(messages, sender) {
-
-	let elements = [];
-	for (var m = 0; m < messages.length; m++) {
-		let message = messages[m];
-		let buttons = [];
-		for (var b = 0; b < message.buttons.length; b++) {
-			let isLink = (message.buttons[b].postback.substring(0, 4) === 'http');
-			let button;
-			if (isLink) {
-				button = {
-					"type": "web_url",
-					"title": message.buttons[b].text,
-					"url": message.buttons[b].postback
-				}
-			} else {
-				button = {
-					"type": "postback",
-					"title": message.buttons[b].text,
-					"payload": message.buttons[b].postback
-				}
-			}
-			buttons.push(button);
-		}
-
-
-		let element = {
-			"title": message.title,
-			"image_url":message.imageUrl,
-			"subtitle": message.subtitle,
-			"buttons": buttons
-		};
-		elements.push(element);
-	}
-	sendGenericMessage(sender, elements);
-}*/
-
 
 function handleApiAiResponse(sender, response) {
 	let responseText = response.result.fulfillment.speech;
@@ -360,229 +284,6 @@ function sendTextMessage(recipientId, text) {
 }
 
 /*
- * Send an image using the Send API.
- *
- */
-/*function sendImageMessage(recipientId, imageUrl) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "image",
-				payload: {
-					url: imageUrl
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}*/
-
-/*
- * Send a Gif using the Send API.
- *
- */
-/*function sendGifMessage(recipientId) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "image",
-				payload: {
-					url: config.SERVER_URL + "/assets/instagram_logo.gif"
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}*/
-
-/*
- * Send audio using the Send API.
- *
- */
-/*function sendAudioMessage(recipientId) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "audio",
-				payload: {
-					url: config.SERVER_URL + "/assets/sample.mp3"
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}*/
-
-/*
- * Send a video using the Send API.
- * example videoName: "/assets/allofus480.mov"
- */
-/*function sendVideoMessage(recipientId, videoName) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "video",
-				payload: {
-					url: config.SERVER_URL + videoName
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}*/
-
-/*
- * Send a video using the Send API.
- * example fileName: fileName"/assets/test.txt"
- */
-/*function sendFileMessage(recipientId, fileName) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "file",
-				payload: {
-					url: config.SERVER_URL + fileName
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}*/
-
-
-
-/*
- * Send a button message using the Send API.
- *
- */
-/*function sendButtonMessage(recipientId, text, buttons) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "template",
-				payload: {
-					template_type: "button",
-					text: text,
-					buttons: buttons
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}
-
-
-function sendGenericMessage(recipientId, elements) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "template",
-				payload: {
-					template_type: "generic",
-					elements: elements
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}
-
-
-function sendReceiptMessage(recipientId, recipient_name, currency, payment_method,
-							timestamp, elements, address, summary, adjustments) {
-	// Generate a random receipt ID as the API requires a unique ID
-	var receiptId = "order" + Math.floor(Math.random() * 1000);
-
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "template",
-				payload: {
-					template_type: "receipt",
-					recipient_name: recipient_name,
-					order_number: receiptId,
-					currency: currency,
-					payment_method: payment_method,
-					timestamp: timestamp,
-					elements: elements,
-					address: address,
-					summary: summary,
-					adjustments: adjustments
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}*/
-
-/*
- * Send a message with Quick Reply buttons.
- *
- */
-/*function sendQuickReply(recipientId, text, replies, metadata) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			text: text,
-			metadata: isDefined(metadata)?metadata:'',
-			quick_replies: replies
-		}
-	};
-
-	callSendAPI(messageData);
-}*/
-
-/*
- * Send a read receipt to indicate the message has been read
- *
- */
-/*function sendReadReceipt(recipientId) {
-
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		sender_action: "mark_seen"
-	};
-
-	callSendAPI(messageData);
-}*/
-
-/*
  * Turn typing indicator on
  *
  */
@@ -615,63 +316,6 @@ function sendTypingOff(recipientId) {
 
 	callSendAPI(messageData);
 }
-
-/*
- * Send a message with the account linking call-to-action
- *
- */
-/*function sendAccountLinking(recipientId) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			attachment: {
-				type: "template",
-				payload: {
-					template_type: "button",
-					text: "Welcome. Link your account.",
-					buttons: [{
-						type: "account_link",
-						url: config.SERVER_URL + "/authorize"
-          }]
-				}
-			}
-		}
-	};
-
-	callSendAPI(messageData);
-}
-
-
-function greetUserText(userId) {
-	//first read user firstname
-	request({
-		uri: 'https://graph.facebook.com/v2.7/' + userId,
-		qs: {
-			access_token: config.FB_PAGE_TOKEN
-		}
-
-	}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-
-			var user = JSON.parse(body);
-
-			if (user.first_name) {
-				console.log("FB user: %s %s, %s",
-					user.first_name, user.last_name, user.gender);
-
-				sendTextMessage(userId, "Welcome " + user.first_name + '!');
-			} else {
-				console.log("Cannot get data for fb user with id",
-					userId);
-			}
-		} else {
-			console.error(response.error);
-		}
-
-	});
-}*/
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll 
@@ -755,25 +399,6 @@ function receivedMessageRead(event) {
 	console.log("Received message read event for watermark %d and sequence " +
 		"number %d", watermark, sequenceNumber);
 }
-
-/*
- * Account Link Event
- *
- * This event is called when the Link Account or UnLink Account action has been
- * tapped.
- * https://developers.facebook.com/docs/messenger-platform/webhook-reference/account-linking
- * 
- */
-/*function receivedAccountLink(event) {
-	var senderID = event.sender.id;
-	var recipientID = event.recipient.id;
-
-	var status = event.account_linking.status;
-	var authCode = event.account_linking.authorization_code;
-
-	console.log("Received account link event with for user %d with status %s " +
-		"and auth code %s ", senderID, status, authCode);
-}*/
 
 /*
  * Delivery Confirmation Event
@@ -873,7 +498,6 @@ function parseExcel() {
     xlsxtojson({
         input: config.fichier,
         output: "output.json",
-        //sheet: "Digital_Service_Stephane",
         lowerCaseHeaders: true
     });
 }
