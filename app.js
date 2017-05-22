@@ -195,8 +195,7 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 function handleMessage(message, sender) {
 	switch (message.type) {
 		case 0: //text
-			//sendTextMessage(sender, message.speech);
-            sendTextMessage(sender,"Ahmad");
+			sendTextMessage(sender, message.speech);
 			break;
 		case 2: //quick replies
 			let replies = [];
@@ -324,6 +323,7 @@ function handleApiAiResponse(sender, response) {
 	} else if (isDefined(responseText)) {
 
 		sendTextMessage(sender, responseText);
+        sendTextMessage(sender, 'Ahmad');
 	}
 }
 
