@@ -207,6 +207,7 @@ function handleMessage(message, sender) {
 					"payload": message.replies[b]
 				}
 				replies.push(reply);
+				replies.push('ahmad');
 			}
 			sendQuickReply(sender, message.title, replies);
 			break;
