@@ -130,7 +130,6 @@ function receivedMessage(event) {
 	}
 	//console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
 	//console.log(JSON.stringify(message));
-	// You may get a text or attachment but not both
 	var messageText = message.text;
 
 
@@ -158,15 +157,13 @@ function handleMessage(message, sender) {
 
 function handleApiAiResponse(sender, response) {
 	let responseText = response.result.fulfillment.speech;
-	let responseData = response.result.fulfillment.data;
-	let messages = response.result.fulfillment.messages;
 	let action = response.result.action;
 	let contexts = response.result.contexts;
 	let parameters = response.result.parameters;
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, responseText, contexts, parameters);
+		handleApiAiAction(sender, action, 'Ahmad', contexts, parameters);
 	}
 }
 
