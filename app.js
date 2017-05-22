@@ -83,7 +83,7 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
 	var data = req.body;
 	console.log(JSON.stringify(data));
-	parseExcel();
+	parseExcel(xlsxtojson);
 
 
 
@@ -868,16 +868,12 @@ function isDefined(obj) {
 	return obj != null;
 }
 
-function parseExcel(req,res) {
+function parseExcel(xlsxtojson) {
     xlsxtojson({
         input: config.fichier,
         output: "output.json",
         //sheet: "Digital_Service_Stephane",
         lowerCaseHeaders: true
-    }, function (err, result) {
-        if (err) {
-            return res.json({data: null});
-        }
     });
 }
 
