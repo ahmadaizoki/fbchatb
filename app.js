@@ -83,7 +83,6 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
 	var data = req.body;
 	console.log(JSON.stringify(data));
-	//parseExcel();
 
 
 
@@ -137,24 +136,14 @@ function receivedMessage(event) {
 	}
 	//console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
 	//console.log(JSON.stringify(message));
-
-	var isEcho = message.is_echo;
-	var messageId = message.mid;
-	var appId = message.app_id;
-	var metadata = message.metadata;
-
 	// You may get a text or attachment but not both
 	var messageText = message.text;
-	var messageAttachments = message.attachments;
-	var quickReply = message.quick_reply;
 
 
 	if (messageText) {
 		//send message to api.ai
 		sendToApiAi(senderID, messageText);
-	} /*else if (messageAttachments) {
-		handleMessageAttachments(messageAttachments, senderID);
-	}*/
+	}
 }
 
 
