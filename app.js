@@ -140,25 +140,6 @@ function receivedMessage(event) {
 	}
 }
 
-
-function handleMessageAttachments(messageAttachments, senderID){
-	//for now just reply
-	sendTextMessage(senderID, "Attachment received. Thank you.");	
-}
-
-function handleQuickReply(senderID, quickReply, messageId) {
-	var quickReplyPayload = quickReply.payload;
-	console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
-	//send payload to api.ai
-	sendToApiAi(senderID, quickReplyPayload);
-}
-
-//https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-echo
-function handleEcho(messageId, appId, metadata) {
-	// Just logging message echoes to console
-	console.log("Received echo for message %s and app %d with metadata %s", messageId, appId, metadata);
-}
-
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 	switch (action) {
 		default:
