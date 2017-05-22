@@ -163,7 +163,7 @@ function handleApiAiResponse(sender, response) {
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, 'Ahmad', contexts, parameters);
+		handleApiAiAction(sender, action, /*'Ahmad'*/responseText, contexts, parameters);
 	}
 }
 
