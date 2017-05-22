@@ -230,7 +230,7 @@ function handleMessage(message, sender) {
 }
 
 
-function handleCardMessages(messages, sender) {
+/*function handleCardMessages(messages, sender) {
 
 	let elements = [];
 	for (var m = 0; m < messages.length; m++) {
@@ -265,7 +265,7 @@ function handleCardMessages(messages, sender) {
 		elements.push(element);
 	}
 	sendGenericMessage(sender, elements);
-}
+}*/
 
 
 function handleApiAiResponse(sender, response) {
@@ -363,7 +363,7 @@ function sendTextMessage(recipientId, text) {
  * Send an image using the Send API.
  *
  */
-function sendImageMessage(recipientId, imageUrl) {
+/*function sendImageMessage(recipientId, imageUrl) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -379,13 +379,13 @@ function sendImageMessage(recipientId, imageUrl) {
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 /*
  * Send a Gif using the Send API.
  *
  */
-function sendGifMessage(recipientId) {
+/*function sendGifMessage(recipientId) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -401,13 +401,13 @@ function sendGifMessage(recipientId) {
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 /*
  * Send audio using the Send API.
  *
  */
-function sendAudioMessage(recipientId) {
+/*function sendAudioMessage(recipientId) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -423,13 +423,13 @@ function sendAudioMessage(recipientId) {
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 /*
  * Send a video using the Send API.
  * example videoName: "/assets/allofus480.mov"
  */
-function sendVideoMessage(recipientId, videoName) {
+/*function sendVideoMessage(recipientId, videoName) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -445,13 +445,13 @@ function sendVideoMessage(recipientId, videoName) {
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 /*
  * Send a video using the Send API.
  * example fileName: fileName"/assets/test.txt"
  */
-function sendFileMessage(recipientId, fileName) {
+/*function sendFileMessage(recipientId, fileName) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -467,7 +467,7 @@ function sendFileMessage(recipientId, fileName) {
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 
 
@@ -475,7 +475,7 @@ function sendFileMessage(recipientId, fileName) {
  * Send a button message using the Send API.
  *
  */
-function sendButtonMessage(recipientId, text, buttons) {
+/*function sendButtonMessage(recipientId, text, buttons) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -545,13 +545,13 @@ function sendReceiptMessage(recipientId, recipient_name, currency, payment_metho
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 /*
  * Send a message with Quick Reply buttons.
  *
  */
-function sendQuickReply(recipientId, text, replies, metadata) {
+/*function sendQuickReply(recipientId, text, replies, metadata) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -564,13 +564,13 @@ function sendQuickReply(recipientId, text, replies, metadata) {
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 /*
  * Send a read receipt to indicate the message has been read
  *
  */
-function sendReadReceipt(recipientId) {
+/*function sendReadReceipt(recipientId) {
 
 	var messageData = {
 		recipient: {
@@ -580,7 +580,7 @@ function sendReadReceipt(recipientId) {
 	};
 
 	callSendAPI(messageData);
-}
+}*/
 
 /*
  * Turn typing indicator on
@@ -620,7 +620,7 @@ function sendTypingOff(recipientId) {
  * Send a message with the account linking call-to-action
  *
  */
-function sendAccountLinking(recipientId) {
+/*function sendAccountLinking(recipientId) {
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -671,14 +671,14 @@ function greetUserText(userId) {
 		}
 
 	});
-}
+}*/
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll 
  * get the message id in a response 
  *
  */
-function callSendAPI(messageData) {
+/*function callSendAPI(messageData) {
 	request({
 		uri: 'https://graph.facebook.com/v2.6/me/messages',
 		qs: {
@@ -703,7 +703,7 @@ function callSendAPI(messageData) {
 			console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
 		}
 	});
-}
+}*/
 
 
 
@@ -764,7 +764,7 @@ function receivedMessageRead(event) {
  * https://developers.facebook.com/docs/messenger-platform/webhook-reference/account-linking
  * 
  */
-function receivedAccountLink(event) {
+/*function receivedAccountLink(event) {
 	var senderID = event.sender.id;
 	var recipientID = event.recipient.id;
 
@@ -773,7 +773,7 @@ function receivedAccountLink(event) {
 
 	console.log("Received account link event with for user %d with status %s " +
 		"and auth code %s ", senderID, status, authCode);
-}
+}*/
 
 /*
  * Delivery Confirmation Event
