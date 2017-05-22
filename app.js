@@ -51,7 +51,7 @@ app.use(bodyParser.json())
 
 
 const apiAiService = apiai(config.API_AI_CLIENT_ACCESS_TOKEN, {
-	language: "en",
+	language: "fr",
 	requestSource: "fb"
 });
 const sessionIds = new Map();
