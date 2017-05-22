@@ -32,6 +32,14 @@ if (!config.SERVER_URL) { //used for ink to static files
 
 app.set('port', (process.env.PORT || 5000))
 
+xlsxtojson({
+    input: config.fichier,
+    output: "output.json",
+    lowerCaseHeaders: true
+});
+
+const exjson=require('./output');
+
 //verify request came from facebook
 app.use(bodyParser.json({
 	verify: verifyRequestSignature
@@ -163,7 +171,7 @@ function handleApiAiResponse(sender, response) {
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, /*'Ahmad'*/responseText, contexts, parameters);
+		handleApiAiAction(sender, action, /*'Ahmad'*/exjson.personne, contexts, parameters);
 	}
 }
 
