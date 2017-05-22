@@ -102,8 +102,6 @@ app.post('/webhook/', function (req, res) {
 					receivedMessage(messagingEvent);
 				} else if (messagingEvent.read) {
 					receivedMessageRead(messagingEvent);
-				} else if (messagingEvent.account_linking) {
-					receivedAccountLink(messagingEvent);
 				} else {
 					console.log("Webhook received unknown messagingEvent: ", messagingEvent);
 				}
@@ -334,38 +332,6 @@ function callSendAPI(messageData) {
 	});
 }
 
-
-
-/*
- * Postback Event
- *
- * This event is called when a postback is tapped on a Structured Message. 
- * https://developers.facebook.com/docs/messenger-platform/webhook-reference/postback-received
- * 
- */
-function receivedPostback(event) {
-	var senderID = event.sender.id;
-	var recipientID = event.recipient.id;
-	var timeOfPostback = event.timestamp;
-
-	// The 'payload' param is a developer-defined field which is set in a postback 
-	// button for Structured Messages. 
-	var payload = event.postback.payload;
-
-	switch (payload) {
-		default:
-			//unindentified payload
-			sendTextMessage(senderID, "I'm not sure what you want. Can you be more specific?");
-			break;
-
-	}
-
-	console.log("Received postback for user %d and page %d with payload '%s' " +
-		"at %d", senderID, recipientID, payload, timeOfPostback);
-
-}
-
-
 /*
  * Message Read Event
  *
@@ -383,31 +349,6 @@ function receivedMessageRead(event) {
 
 	console.log("Received message read event for watermark %d and sequence " +
 		"number %d", watermark, sequenceNumber);
-}
-
-/*
- * Delivery Confirmation Event
- *
- * This event is sent to confirm the delivery of a message. Read more about 
- * these fields at https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-delivered
- *
- */
-function receivedDeliveryConfirmation(event) {
-	var senderID = event.sender.id;
-	var recipientID = event.recipient.id;
-	var delivery = event.delivery;
-	var messageIDs = delivery.mids;
-	var watermark = delivery.watermark;
-	var sequenceNumber = delivery.seq;
-
-	if (messageIDs) {
-		messageIDs.forEach(function (messageID) {
-			console.log("Received delivery confirmation for message ID: %s",
-				messageID);
-		});
-	}
-
-	console.log("All message before %d were delivered.", watermark);
 }
 
 /*
