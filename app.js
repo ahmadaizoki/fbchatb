@@ -176,7 +176,7 @@ function handleApiAiResponse(sender, response) {
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, /*'Ahmad'*/exjson.personne, contexts, parameters);
+		handleApiAiAction(sender, action, /*'Ahmad'*/exjson[0].personne, contexts, parameters);
 	}
 }
 
