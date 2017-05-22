@@ -199,19 +199,6 @@ function handleApiAiResponse(sender, response) {
 		//api ai could not evaluate input.
 		console.log('Unknown query' + response.result.resolvedQuery);
 		sendTextMessage(sender, "I'm not sure what you want. Can you be more specific?");
-	} else if (isDefined(action)) {
-		handleApiAiAction(sender, action, responseText, contexts, parameters);
-	} else if (isDefined(responseData) && isDefined(responseData.facebook)) {
-		try {
-			console.log('Response as formatted message' + responseData.facebook);
-			sendTextMessage(sender, responseData.facebook);
-		} catch (err) {
-			sendTextMessage(sender, err.message);
-		}
-	} else if (isDefined(responseText)) {
-
-		//sendTextMessage(sender, responseText);
-        sendTextMessage(sender, 'Ahmad');
 	}
 }
 
