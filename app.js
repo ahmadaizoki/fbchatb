@@ -176,16 +176,16 @@ function handleApiAiResponse(sender, response) {
 	let intentName=response.result.metadata.intentName;
 	let fonction=response.result.parameters.fonction;
 	let projet=response.result.parameters.projet;
-	let responses;
+	let responses="";
 	let jsonArray=[];
 
 	if(intentName==="projet_fonction"){
 		if (fonction==="" || projet===""){
 			responses=responseText;
 		}else {
-			for (let i in exjson){
+			for (var i in exjson){
 				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-                    responses=exjson[i].personne;
+                    responses+=exjson[i].personne;
 				}
 			}
 			//responses=jsonArray.toString();
