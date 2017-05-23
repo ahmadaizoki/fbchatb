@@ -177,12 +177,19 @@ function handleApiAiResponse(sender, response) {
 	let fonction=response.result.parameters.fonction;
 	let projet=response.result.parameters.projet;
 	let responses;
+	let jsonArray=[];
 
 	if(intentName==="projet_fonction"){
 		if (fonction==="" || projet===""){
 			responses=responseText;
 		}else {
-			responses="ahmad";
+			for (let i in exjson){
+				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
+                    jsonArray=jsonArray.concat([exjson[i].personne]);
+				}
+			}
+			responses=jsonArray;
+			//responses="ahmad";
 		}
 	}else {
 		responses=responseText;
