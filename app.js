@@ -184,10 +184,10 @@ function handleApiAiResponse(sender, response) {
 			responses=responseText;
 		}else {
 			for (var i in exjson){
-				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
+				if (exjson[9].projet===projet && exjson[9].fonction===fonction){
+                    responses=exjson[9].personne;
 				}
 			}
-			responses=exjson[1].personne;
 			//responses=jsonArray.toString();
 			//responses="ahmad";
 		}
