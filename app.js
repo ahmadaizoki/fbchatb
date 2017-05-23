@@ -176,7 +176,7 @@ function handleApiAiResponse(sender, response) {
 	let intentName=response.result.metadata.intentName;
 	let responses;
 
-	if(intentName==="projet_fonction"){
+	if(intentName==="projett_fonction"){
 		responses="ahmad";
 	}else {
 		responses=responseText;
