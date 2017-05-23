@@ -174,7 +174,7 @@ function handleApiAiResponse(sender, response) {
 	let parameters = response.result.parameters;
 	const exjson=require('./output');
 	let intentName=response.result.metadata.intentName;
-	let fonction=response.result.parmeters.fonction;
+	let fonction=response.result.parameters.fonction;
 	let projet=response.result.parameters.projet;
 	let responses;
 
