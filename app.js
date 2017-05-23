@@ -189,7 +189,12 @@ function handleApiAiResponse(sender, response) {
                     text+=exjson[i].personne;
 				}
 			}
-			responses=text;
+			if (text===""){
+				responses="Vous pouvez récrire votre question?";
+			}else {
+                responses=text;
+			}
+
 			//responses=jsonArray.toString();
 			//responses="ahmad";
 		}
