@@ -185,10 +185,10 @@ function handleApiAiResponse(sender, response) {
 		}else {
 			for (let i in exjson){
 				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-                    jsonArray=jsonArray.concat([exjson[i].personne]);
+                    responses=exjson[i].personne;
 				}
 			}
-			responses=jsonArray.toString();
+			//responses=jsonArray.toString();
 			//responses="ahmad";
 		}
 	}else {
