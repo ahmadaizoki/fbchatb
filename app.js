@@ -176,7 +176,7 @@ function handleApiAiResponse(sender, response) {
 	let intentName=response.result.metadata.intentName;
 	let responses;
 
-	if(intentName==="projett_fonction"){
+	if(intentName==="projet_fonction"){
 		responses="ahmad";
 	}else {
 		responses=responseText;
@@ -184,7 +184,7 @@ function handleApiAiResponse(sender, response) {
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, responseText, contexts, parameters);
+		handleApiAiAction(sender, action, responses, contexts, parameters);
 	}
 }
 
