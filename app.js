@@ -178,7 +178,6 @@ function handleApiAiResponse(sender, response) {
 	let projet=response.result.parameters.projet;
 	let responses;
 	let text="";
-	let jsonArray=[];
 
 	if(intentName==="projet_fonction"){
 		if (fonction==="" || projet===""){
