@@ -177,7 +177,7 @@ function handleApiAiResponse(sender, response) {
 	let fonction=response.result.parameters.fonction;
 	let projet=response.result.parameters.projet;
 	let responses;
-	let jsonArray="";
+	let jsonArray=[];
 
 	if(intentName==="projet_fonction"){
 		if (fonction==="" || projet===""){
@@ -185,10 +185,10 @@ function handleApiAiResponse(sender, response) {
 		}else {
 			for (let i in exjson){
 				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-                    jsonArray+="exjson[i].personne";
+                    jsonArray=jsonArray.concat([{Personne:exjson[i].personne}]);
 				}
 			}
-			responses=jsonArray;
+			responses=jsonArray.toString();
 			//responses="ahmad";
 		}
 	}else {
