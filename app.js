@@ -184,7 +184,7 @@ function handleApiAiResponse(sender, response) {
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, responses, contexts, parameters);
+		handleApiAiAction(sender, action, responseText, contexts, parameters);
 	}
 }
 
