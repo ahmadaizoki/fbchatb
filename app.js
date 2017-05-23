@@ -185,7 +185,7 @@ function handleApiAiResponse(sender, response) {
 		}else {
 			for (let i in exjson){
 				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-                    jsonArray=jsonArray.concat([{Personne:exjson[i].personne}]);
+                    jsonArray=jsonArray.concat([exjson[i].personne]);
 				}
 			}
 			responses=jsonArray.toString();
