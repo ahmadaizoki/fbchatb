@@ -173,10 +173,18 @@ function handleApiAiResponse(sender, response) {
 	let contexts = response.result.contexts;
 	let parameters = response.result.parameters;
 	const exjson=require('./output');
+	let intentName=response.result.metadata.intentName;
+	let responses;
+
+	if(intentName==="projet_fonction"){
+		responses="ahmad";
+	}else {
+		responses=responseText;
+	}
 
 	sendTypingOff(sender);
     if (isDefined(action)) {
-		handleApiAiAction(sender, action, /*'Ahmad'*/exjson[0].personne, contexts, parameters);
+		handleApiAiAction(sender, action, responses, contexts, parameters);
 	}
 }
 
