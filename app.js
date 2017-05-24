@@ -184,7 +184,7 @@ function handleApiAiResponse(sender, response) {
         let projet1=response.result.parameters.projet1;
         let projet2=response.result.parameters.projet2;
         let projet3=response.result.parameters.projet3;
-        let fonction=fonction1+" "+fonction2+" "+fonction3;
+        let fonction=fonction1+" "+fonction2;/*+" "+fonction3;*/
         let projet=projet1+projet2+projet3;
 		if (fonction1==="" || projet1===""){
 			responses=responseText;
