@@ -178,14 +178,28 @@ function handleApiAiResponse(sender, response) {
 	let text="";
 
 	if(intentName==="projet_fonction"){
+		let fonction;
+		let projet;
 		let fonction1=response.result.parameters.fonction1;
         let fonction2=response.result.parameters.fonction2;
         let fonction3=response.result.parameters.fonction3;
         let projet1=response.result.parameters.projet1;
         let projet2=response.result.parameters.projet2;
         let projet3=response.result.parameters.projet3;
-        let fonction=fonction1+" "+fonction2;/*+" "+fonction3;*/
-        let projet=projet1+projet2+projet3;
+        if (fonction3===""){
+            fonction=fonction1+" "+fonction2;
+		}else if (fonction2==="" && fonction3===""){
+            fonction=fonction1;
+		}else {
+            fonction=fonction1+" "+fonction2+" "+fonction3;
+		}
+		if (projet2==="" && projet3===""){
+            projet=projet1;
+		}else if (projet3===""){
+            projet=projet1+" "+projet2;
+		}else {
+            projet=projet1+" "+projet2+" "+projet3;
+		}
 		if (fonction1==="" || projet1===""){
 			responses=responseText;
 		}else {
