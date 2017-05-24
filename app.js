@@ -174,13 +174,19 @@ function handleApiAiResponse(sender, response) {
 	let parameters = response.result.parameters;
 	const exjson=require('./output');
 	let intentName=response.result.metadata.intentName;
-	let fonction=response.result.parameters.fonction;
-	let projet=response.result.parameters.projet;
 	let responses;
 	let text="";
 
 	if(intentName==="projet_fonction"){
-		if (fonction==="" || projet===""){
+		let fonction1=response.result.parameters.fonction1;
+        let fonction2=response.result.parameters.fonction2;
+        let fonction3=response.result.parameters.fonction3;
+        let projet1=response.result.parameters.projet1;
+        let projet2=response.result.parameters.projet2;
+        let projet3=response.result.parameters.projet3;
+        let fonction=fonction1+fonction2+fonction3;
+        let projet=projet1+projet2+projet3;
+		if (fonction1==="" || projet1===""){
 			responses=responseText;
 		}else {
 			for (var i in exjson){
@@ -193,9 +199,6 @@ function handleApiAiResponse(sender, response) {
 			}else {
                 responses=text;
 			}
-
-			//responses=jsonArray.toString();
-			//responses="ahmad";
 		}
 	}else {
 		responses=responseText;
