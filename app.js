@@ -214,7 +214,33 @@ function handleApiAiResponse(sender, response) {
                 responses=text;
 			}
 		}
-	}else {
+	}else if(intentName==="projet"){
+		let projet;
+		let projet1=response.result.parameters.projet1;
+        let projet2=response.result.parameters.projet2;
+        let projet3=response.result.parameters.projet3;
+        if (projet2==="" && projet3===""){
+        	projet=projet1;
+		}else if (projet3===""){
+        	projet=projet1+" "+projet2;
+		}else {
+			projet=projet1+" "+projet2+" "+projet3;
+		}
+		if (projet1===""){
+			responses=responseText;
+		}else{
+			for (var i in exjson){
+				if (exjson[i].projet===projet){
+					text=text+"La personne "+exjson[i].personne+" Sa fonction "+exjson[i].fonction+" ";
+				}
+			}
+			if (text===""){
+                responses="Vous pouvez récrire votre question?";
+			}else {
+                responses=text;
+			}
+		}
+	} else {
 		responses=responseText;
 	}
 
