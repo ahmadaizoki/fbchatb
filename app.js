@@ -200,19 +200,15 @@ function handleApiAiResponse(sender, response) {
 		}else {
             projet=projet1+" "+projet2+" "+projet3;
 		}
-		if (fonction1==="" || projet1===""){
-			responses=responseText;
+		for (var i in exjson){
+			if (exjson[i].projet===projet && exjson[i].fonction===fonction){
+				text=text+exjson[i].personne+" ";
+			}
+		}
+		if (text===""){
+			responses="Vous pouvez récrire votre question?";
 		}else {
-			for (var i in exjson){
-				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-                    text=text+exjson[i].personne+" ";
-				}
-			}
-			if (text===""){
-				responses="Vous pouvez récrire votre question?";
-			}else {
-                responses=text;
-			}
+			responses=text;
 		}
 	}else if(intentName==="projet"){
 		let projet;
@@ -226,19 +222,15 @@ function handleApiAiResponse(sender, response) {
 		}else {
 			projet=projet1+" "+projet2+" "+projet3;
 		}
-		if (projet1===""){
-			responses=responseText;
-		}else{
-			for (var i in exjson){
-				if (exjson[i].projet===projet){
-					text=text+"[La personne:{ "+exjson[i].personne+"}, Sa fonction:{ "+exjson[i].fonction+"}] ";
-				}
+		for (var i in exjson){
+			if (exjson[i].projet===projet){
+				text=text+"[La personne:{ "+exjson[i].personne+"}, Sa fonction:{ "+exjson[i].fonction+"}] ";
 			}
-			if (text===""){
-                responses="Vous pouvez récrire votre question?";
-			}else {
-                responses=text;
-			}
+		}
+		if (text===""){
+			responses="Vous pouvez récrire votre question?";
+		}else {
+			responses=text;
 		}
 	} else {
 		responses=responseText;
