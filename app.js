@@ -231,7 +231,7 @@ function handleApiAiResponse(sender, response) {
 		}else{
 			for (var i in exjson){
 				if (exjson[i].projet===projet){
-					text=text+"La personne:{ "+exjson[i].personne+"} Sa fonction:{ "+exjson[i].fonction+"} ";
+					text=text+"[La personne:{ "+exjson[i].personne+"}, Sa fonction:{ "+exjson[i].fonction+"}] ";
 				}
 			}
 			if (text===""){
