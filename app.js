@@ -186,14 +186,14 @@ function handleApiAiResponse(sender, response) {
         let projet1=response.result.parameters.projet1;
         let projet2=response.result.parameters.projet2;
         let projet3=response.result.parameters.projet3;
-        if (fonction3===""){
-            fonction=fonction1+" "+fonction2;
-		}else if (fonction2==="" & fonction3===""){
+        if (fonction2==="" && fonction3===""){
             fonction=fonction1;
+		}else if (fonction3===""){
+            fonction=fonction1+" "+fonction2;
 		}else {
             fonction=fonction1+" "+fonction2+" "+fonction3;
 		}
-		if (projet2==="" & projet3===""){
+		if (projet2==="" && projet3===""){
             projet=projet1;
 		}else if (projet3===""){
             projet=projet1+" "+projet2;
