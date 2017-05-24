@@ -232,7 +232,23 @@ function handleApiAiResponse(sender, response) {
 		}else {
 			responses=text;
 		}
-	} else {
+	}else if (intentName==="personne"){
+		let personne;
+		let prenom=response.result.parameters.prenom1;
+        let nom=response.result.parameters.nom1;
+        personne=prenom+" "+nom;
+        for (var i in exjson){
+        	if (exjson[i]===personne){
+        		text=text+"[Le projet:{ "+exjson[i].projet+"}, La fonction:{ "+exjson[i].fonction+"}] ";
+			}
+		}
+		if (text===""){
+            responses="Vous pouvez récrire votre question?";
+		}else {
+            responses=text;
+		}
+	}
+	else {
 		responses=responseText;
 	}
 
