@@ -205,7 +205,7 @@ function handleApiAiResponse(sender, response) {
 		}else {
 			for (var i in exjson){
 				if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-                    text=text+exjson[i].personne+"/br";
+                    text=text+exjson[i].personne+" ";
 				}
 			}
 			if (text===""){
