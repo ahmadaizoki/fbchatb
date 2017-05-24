@@ -410,14 +410,6 @@ function isDefined(obj) {
 	return obj != null;
 }
 
-function parseExcel() {
-    xlsxtojson({
-        input: config.fichier,
-        output: "output.json",
-        lowerCaseHeaders: true
-    });
-}
-
 // Spin up the server
 app.listen(app.get('port'), function () {
 	console.log('running on port', app.get('port'))
