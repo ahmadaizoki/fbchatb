@@ -176,13 +176,6 @@ function handleApiAiResponse(sender, response) {
 	let parameters = response.result.parameters;
 	let intentName=response.result.metadata.intentName;
 	let text="";
-	db.any(`SELECT def from synonyme`)
-		.then(data=>{
-			console.log(data);
-		})
-		.catch(error =>{
-            console.log('ERROR:', error);
-        });
 
 	if(intentName==="projet_fonction"){
         let fonction;
