@@ -284,7 +284,7 @@ function handleApiAiResponse(sender, response) {
     } else if (intentName==="signifie"){
         let syno=response.result.parameters.syno1;
         syno=syno.toLowerCase();
-        db1.any(`SELECT def FROM synonyme WHERE synonyme='${syno}'`)
+        db1.any(`SELECT def FROM synonyme `)
             .then(data => {
                 for (var i in data){
                     text=text+data[i].def+" ";
