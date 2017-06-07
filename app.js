@@ -176,6 +176,13 @@ function handleApiAiResponse(sender, response) {
 	let parameters = response.result.parameters;
 	let intentName=response.result.metadata.intentName;
 	let text="";
+	db.any(`SELECT def from synonyme`)
+		.then(data=>{
+			console.log(data);
+		})
+		.catch(error =>{
+            console.log('ERROR:', error);
+        });
 
 	if(intentName==="projet_fonction"){
         let fonction;
@@ -284,7 +291,7 @@ function handleApiAiResponse(sender, response) {
     } else if (intentName==="signifie"){
         let syno=response.result.parameters.syno1;
         syno=syno.toLowerCase();
-        db1.any(`SELECT def FROM synonyme `)
+        db1.any(`SELECT def FROM synonyme WHERE synonyme='${syno}'`)
             .then(data => {
                 for (var i in data){
                     text=text+data[i].def+" ";
