@@ -270,13 +270,17 @@ function handleApiAiResponse(sender, response) {
             });
 	}
 	else {
-        handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+        if (isDefined(action)) {
+            handleApiAiAction(sender, action, responseText, contexts, parameters);
+        }
+        else {
+            handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+		}
+
 	}
 
-	/*sendTypingOff(sender);
-    if (isDefined(action)) {
-		handleApiAiAction(sender, action, responses, contexts, parameters);
-	}*/
+	sendTypingOff(sender);
+
 }
 
 function sendToApiAi(sender, text) {
