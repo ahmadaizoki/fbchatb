@@ -14,9 +14,11 @@ var options = {
     promiseLib: promise
 };
 var pgp = require('pg-promise')(options);
+var pgp1 = require('pg-promise')(options);
+var pgp2 = require('pg-promise')(options);
 var db=pgp(process.env.DATABASE_URL);
-var db1=pgp(process.env.DATABASE_URL);
-var db2=pgp(process.env.DATABASE_URL);
+var db1=pgp1(process.env.DATABASE_URL);
+var db2=pgp2(process.env.DATABASE_URL);
 
 
 
@@ -294,7 +296,7 @@ function handleApiAiResponse(sender, response) {
                 }
             })
             .catch(error =>{
-                console.log('ERROR:', error);
+                console.log('ERROR111:', error);
             });
     } else if (intentName==="date") {
         let jalon;
@@ -334,7 +336,7 @@ function handleApiAiResponse(sender, response) {
 
             })
             .catch(error => {
-                console.log('ERROR:', error);
+                console.log('ERROR111:', error);
             });
     } else {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
