@@ -213,60 +213,70 @@ function handleApiAiResponse(sender, response) {
                 for (var i in data){
                     text=text+data[i].personne+" ";
                 }
-                if (isDefined(action)) {
+                if (text==="") {
+                    handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+                }else {
                     handleApiAiAction(sender, action, text, contexts, parameters);
-                }
+				}
 
             })
             .catch(error =>{
                 console.log('ERROR:', error);
             });
 	}else if(intentName==="projet"){
-		let projet;
-		let projet1=response.result.parameters.projet1;
+        let projet;
+        let projet1=response.result.parameters.projet1;
         let projet2=response.result.parameters.projet2;
         let projet3=response.result.parameters.projet3;
         if (projet2==="" && projet3===""){
-        	projet=projet1;
-		}else if (projet3===""){
-        	projet=projet1+" "+projet2;
-		}else {
-			projet=projet1+" "+projet2+" "+projet3;
-		}
-		for (var i in exjson){
-			if (exjson[i].projet===projet){
-				text=text+"[La personne:{ "+exjson[i].personne+"}, Sa fonction:{ "+exjson[i].fonction+"}] ";
-			}
-		}
-		if (text===""){
-			responses="Vous pouvez récrire votre question?";
-		}else {
-			responses=text;
-		}
+            projet=projet1;
+        }else if (projet3===""){
+            projet=projet1+" "+projet2;
+        }else {
+            projet=projet1+" "+projet2+" "+projet3;
+        }
+        db.any(`SELECT personne,fonction FROM projet WHERE projet='${projet}'`)
+            .then(data => {
+                for (var i in data){
+                    text=text+"La personne: "+data[i].personne+" et ca fonction: "+data[i].fonction+" ";
+                }
+                if (text===""){
+                    handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+                } else {
+                    handleApiAiAction(sender, action, text, contexts, parameters);
+                }
+            })
+            .catch(error =>{
+                console.log('ERROR:', error);
+            });
 	}else if (intentName==="personne"){
-		let personne;
-		let prenom=response.result.parameters.prenom1;
+        let personne;
+        let prenom=response.result.parameters.prenom1;
         let nom=response.result.parameters.nom1;
         personne=prenom+" "+nom;
-        for (var i in exjson){
-        	if (exjson[i].personne===personne){
-        		text=text+"[Le projet:{ "+exjson[i].projet+"}, La fonction:{ "+exjson[i].fonction+"}] ";
-			}
-		}
-		if (text===""){
-            responses="Vous pouvez récrire votre question?";
-		}else {
-            responses=text;
-		}
+        db.any(`SELECT projet,fonction FROM projet WHERE personne='${personne}'`)
+            .then(data => {
+                for (var i in data){
+                    text=text+"Le projet: "+data[i].projet+" et ca fonction: "+data[i].fonction+" ";
+                }
+                if (text===""){
+                    handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+                } else {
+                    handleApiAiAction(sender, action, text, contexts, parameters);
+                }
+            })
+            .catch(error =>{
+                console.log('ERROR:', error);
+            });
 	}
 	else {
-		responses=responseText;
+        handleApiAiAction(sender, action, config.messageError, contexts, parameters);
 	}
 
-	sendTypingOff(sender);
+	/*sendTypingOff(sender);
     if (isDefined(action)) {
 		handleApiAiAction(sender, action, responses, contexts, parameters);
-	}
+	}*/
 }
 
 function sendToApiAi(sender, text) {
