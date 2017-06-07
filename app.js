@@ -15,6 +15,8 @@ var options = {
 };
 var pgp = require('pg-promise')(options);
 var db=pgp(process.env.DATABASE_URL);
+var db1=pgp(process.env.DATABASE_URL);
+var db2=pgp(process.env.DATABASE_URL);
 
 
 
@@ -196,6 +198,8 @@ function handleApiAiResponse(sender, response) {
         } else {
             projet = projet1 + " " + projet2 + " " + projet3;
         }
+        projet=projet.toLowerCase();
+        fonction=fonction.toLowerCase();
         db.any(`SELECT personne FROM projet WHERE projet='${projet}' AND fonction='${fonction}'`)
             .then(data => {
                 for (var i in data){
@@ -223,6 +227,7 @@ function handleApiAiResponse(sender, response) {
         }else {
             projet=projet1+" "+projet2+" "+projet3;
         }
+        projet=projet.toLowerCase();
         db.any(`SELECT personne,fonction FROM projet WHERE projet='${projet}'`)
             .then(data => {
                 for (var i in data){
@@ -242,6 +247,7 @@ function handleApiAiResponse(sender, response) {
         let prenom=response.result.parameters.prenom1;
         let nom=response.result.parameters.nom1;
         personne=prenom+" "+nom;
+        personne=personne.toLowerCase();
         db.any(`SELECT projet,fonction FROM projet WHERE personne='${personne}'`)
             .then(data => {
                 for (var i in data){
@@ -274,7 +280,6 @@ function handleApiAiResponse(sender, response) {
                 console.log('ERROR:', error);
             });
     } else if (intentName==="signifie"){
-        var db1=pgp(process.env.DATABASE_URL);
         let syno=response.result.parameters.syno1;
         syno=syno.toLowerCase();
         db1.any(`SELECT def FROM synonyme WHERE synonyme='${syno}'`)
@@ -292,7 +297,6 @@ function handleApiAiResponse(sender, response) {
                 console.log('ERROR:', error);
             });
     } else if (intentName==="date") {
-        var db2=pgp(process.env.DATABASE_URL);
         let jalon;
         let projet;
         let jalon1 = response.result.parameters.d1;
