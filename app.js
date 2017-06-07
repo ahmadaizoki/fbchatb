@@ -268,8 +268,81 @@ function handleApiAiResponse(sender, response) {
             .catch(error =>{
                 console.log('ERROR:', error);
             });
-	}
-	else {
+    }else if (intentName==="list" ) {
+        let table=response.result.parameters.table1;
+        table=table.toLowerCase();
+        db.any(config.selectAll)
+            .then(data => {
+                for (var i in data){
+                    text=text+"Le projet: "+data[i].projet+" et la fonction: "+data[i].fonction+" et le prenom nom: "+data[i].personne+" ";
+                }
+                if (text===""){
+                    handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+                } else {
+                    handleApiAiAction(sender, action, text, contexts, parameters);
+                }
+            })
+            .catch(error =>{
+                console.log('ERROR:', error);
+            });
+    } else if (intentName==="signifie"){
+        let syno=response.result.parameters.syno1;
+        syno=syno.toLowerCase();
+        db.any(`SELECT def FROM synonyme WHERE synonyme='${syno}'`)
+            .then(data => {
+                for (var i in data){
+                    text=text+data[i].def+" ";
+                }
+                if (text===""){
+                    handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+                } else {
+                    handleApiAiAction(sender, action, text, contexts, parameters);
+                }
+            })
+            .catch(error =>{
+                console.log('ERROR:', error);
+            });
+    } else if (intentName==="date") {
+        let jalon;
+        let projet;
+        let jalon1 = response.result.parameters.d1;
+        let jalon2 = response.result.parameters.d2;
+        let jalon3 = response.result.parameters.d3;
+        let projet1 = response.result.parameters.na1;
+        let projet2 = response.result.parameters.na2;
+        let projet3 = response.result.parameters.na3;
+        if (jalon2 === "" && jalon3 === "") {
+            jalon = jalon1;
+        } else if (jalon3 === "") {
+            jalon = jalon1 + " " + jalon2;
+        } else {
+            jalon = jalon1 + " " + jalon2 + " " + jalon3;
+        }
+        if (projet2 === "" && projet3 === "") {
+            projet = projet1;
+        } else if (projet3 === "") {
+            projet = projet1 + " " + projet2;
+        } else {
+            projet = projet1 + " " + projet2 + " " + projet3;
+        }
+        jalon = jalon.toLowerCase();
+        projet = projet.toLowerCase();
+        db.any(`SELECT date FROM date WHERE nomprojet='${projet}' AND jalon='${jalon}'`)
+            .then(data => {
+                for (var i in data) {
+                    text = text + data[i].date + " ";
+                }
+                if (text === "") {
+                    handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+                } else {
+                    handleApiAiAction(sender, action, text, contexts, parameters);
+                }
+
+            })
+            .catch(error => {
+                console.log('ERROR:', error);
+            });
+    } else {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
 	}
 
