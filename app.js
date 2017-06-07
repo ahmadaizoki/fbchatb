@@ -177,16 +177,8 @@ function handleApiAiResponse(sender, response) {
     let name=sender.message.user.name;
     let username=name.toLowerCase();
     let roletest="";
-    console.log(sender.message.user.name);
+    //console.log(sender.message.user.name);
 
-    db1.any(`SELECT name,role FROM role WHERE name='${username}'`)
-        .then(data1=> {
-            let role;
-            try {
-                role = data1[0].role;
-            } catch (e) {
-                role = "";
-            }
             if(intentName==="projet_fonction"){
                 let fonction;
                 let projet;
@@ -225,10 +217,7 @@ function handleApiAiResponse(sender, response) {
                     .catch(error =>{
                         console.log('ERROR:', error);
                     });
-            }
-        })
-
-	if(intentName==="projet"){
+            } else if(intentName==="projet"){
 		let projet;
 		let projet1=response.result.parameters.projet1;
         let projet2=response.result.parameters.projet2;
