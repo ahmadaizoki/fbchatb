@@ -8,7 +8,15 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
 const uuid = require('uuid');
-const xlsxtojson = require('xlsx-to-json-lc');
+var promise = require('bluebird');
+var options = {
+    // Initialization Options
+    promiseLib: promise
+};
+var pgp = require('pg-promise')(options);
+var pgp1=require('pg-promise')(options);
+var db=pgp(process.env.DATABASE_URL);
+var db1=pgp1(process.env.DATABASE_URL);
 
 
 // Messenger API parameters
@@ -32,15 +40,6 @@ if (!config.SERVER_URL) { //used for ink to static files
 
 app.set('port', (process.env.PORT || 5000))
 
-xlsxtojson({
-    input: config.fichier,
-    output: "output.json",
-    lowerCaseHeaders:true
-}, function(err,result){
-    if(err) {
-        return res.json({data: null});
-    }
-});
 
 
 
@@ -172,45 +171,64 @@ function handleApiAiResponse(sender, response) {
 	let action = response.result.action;
 	let contexts = response.result.contexts;
 	let parameters = response.result.parameters;
-	const exjson=require('./output');
 	let intentName=response.result.metadata.intentName;
 	let responses;
 	let text="";
+    let name=sender.message.user.name;
+    let username=name.toLowerCase();
+    let roletest="";
+    console.log(sender.message.user.name);
 
-	if(intentName==="projet_fonction"){
-		let fonction;
-		let projet;
-		let fonction1=response.result.parameters.fonction1;
-        let fonction2=response.result.parameters.fonction2;
-        let fonction3=response.result.parameters.fonction3;
-        let projet1=response.result.parameters.projet1;
-        let projet2=response.result.parameters.projet2;
-        let projet3=response.result.parameters.projet3;
-        if (fonction2==="" && fonction3===""){
-            fonction=fonction1;
-		}else if (fonction3===""){
-            fonction=fonction1+" "+fonction2;
-		}else {
-            fonction=fonction1+" "+fonction2+" "+fonction3;
-		}
-		if (projet2==="" && projet3===""){
-            projet=projet1;
-		}else if (projet3===""){
-            projet=projet1+" "+projet2;
-		}else {
-            projet=projet1+" "+projet2+" "+projet3;
-		}
-		for (var i in exjson){
-			if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-				text=text+exjson[i].personne+" ";
-			}
-		}
-		if (text===""){
-			responses="Vous pouvez récrire votre question?";
-		}else {
-			responses=text;
-		}
-	}else if(intentName==="projet"){
+    db1.any(`SELECT name,role FROM role WHERE name='${username}'`)
+        .then(data1=> {
+            let role;
+            try {
+                role = data1[0].role;
+            } catch (e) {
+                role = "";
+            }
+            if(intentName==="projet_fonction"){
+                let fonction;
+                let projet;
+                let fonction1 = response.result.parameters.fonction1;
+                let fonction2 = response.result.parameters.fonction2;
+                let fonction3 = response.result.parameters.fonction3;
+                let projet1 = response.result.parameters.projet1;
+                let projet2 = response.result.parameters.projet2;
+                let projet3 = response.result.parameters.projet3;
+                if (fonction2 === "" && fonction3 === "") {
+                    fonction = fonction1;
+                } else if (fonction3 === "") {
+                    fonction = fonction1 + " " + fonction2;
+                } else {
+                    fonction = fonction1 + " " + fonction2 + " " + fonction3;
+                }
+                if (projet2 === "" && projet3 === "") {
+                    projet = projet1;
+                } else if (projet3 === "") {
+                    projet = projet1 + " " + projet2;
+                } else {
+                    projet = projet1 + " " + projet2 + " " + projet3;
+                }
+                db.any(`SELECT personne FROM projet WHERE projet='${projet}' AND fonction='${fonction}'`)
+                    .then(data => {
+                        for (var i in data){
+                            text=text+data[i].personne+" ";
+                        }
+                        if (text===""){
+                            handleApiAiAction(sender, action, config.messageError, contexts, parameters);
+                        } else {
+                            handleApiAiAction(sender, action, text, contexts, parameters);
+                        }
+
+                    })
+                    .catch(error =>{
+                        console.log('ERROR:', error);
+                    });
+            }
+        }
+
+	if(intentName==="projet"){
 		let projet;
 		let projet1=response.result.parameters.projet1;
         let projet2=response.result.parameters.projet2;
