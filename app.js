@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
 const uuid = require('uuid');
-const xlsxtojson = require('xlsx-to-json-lc');
 var promise = require('bluebird');
 var options = {
     // Initialization Options
@@ -40,15 +39,6 @@ if (!config.SERVER_URL) { //used for ink to static files
 
 app.set('port', (process.env.PORT || 5000))
 
-xlsxtojson({
-    input: config.fichier,
-    output: "output.json",
-    lowerCaseHeaders:true
-}, function(err,result){
-    if(err) {
-        return res.json({data: null});
-    }
-});
 
 
 
@@ -180,9 +170,7 @@ function handleApiAiResponse(sender, response) {
 	let action = response.result.action;
 	let contexts = response.result.contexts;
 	let parameters = response.result.parameters;
-	const exjson=require('./output');
 	let intentName=response.result.metadata.intentName;
-	let responses;
 	let text="";
 
 	if(intentName==="projet_fonction"){
@@ -346,7 +334,7 @@ function handleApiAiResponse(sender, response) {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
 	}
 
-	sendTypingOff(sender);
+	//sendTypingOff(sender);
 
 }
 
