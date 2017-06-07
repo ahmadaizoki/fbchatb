@@ -226,7 +226,7 @@ function handleApiAiResponse(sender, response) {
                         console.log('ERROR:', error);
                     });
             }
-        }
+        })
 
 	if(intentName==="projet"){
 		let projet;
