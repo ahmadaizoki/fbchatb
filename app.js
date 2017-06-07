@@ -274,9 +274,10 @@ function handleApiAiResponse(sender, response) {
                 console.log('ERROR:', error);
             });
     } else if (intentName==="signifie"){
+        var db1=pgp(process.env.DATABASE_URL);
         let syno=response.result.parameters.syno1;
         syno=syno.toLowerCase();
-        db.any(`SELECT def FROM synonyme WHERE synonyme='${syno}'`)
+        db1.any(`SELECT def FROM synonyme WHERE synonyme='${syno}'`)
             .then(data => {
                 for (var i in data){
                     text=text+data[i].def+" ";
@@ -291,6 +292,7 @@ function handleApiAiResponse(sender, response) {
                 console.log('ERROR:', error);
             });
     } else if (intentName==="date") {
+        var db2=pgp(process.env.DATABASE_URL);
         let jalon;
         let projet;
         let jalon1 = response.result.parameters.d1;
@@ -315,7 +317,7 @@ function handleApiAiResponse(sender, response) {
         }
         jalon = jalon.toLowerCase();
         projet = projet.toLowerCase();
-        db.any(`SELECT date FROM date WHERE nomprojet='${projet}' AND jalon='${jalon}'`)
+        db2.any(`SELECT date FROM date WHERE nomprojet='${projet}' AND jalon='${jalon}'`)
             .then(data => {
                 for (var i in data) {
                     text = text + data[i].date + " ";
