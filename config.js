@@ -5,4 +5,6 @@ module.exports = {
     FB_APP_SECRET: '0d75d416dee94b9d1ea0ce2fb84b0349',
     SERVER_URL: "https://fbchatb.herokuapp.com/",
     fichier:'Exemple.xlsx',
+    messageAccess:"Vous n'avez pas les droits de completer cet action!",
+    messageError:"Je crois que tu t'es troumbé!",
 };

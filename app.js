@@ -9,6 +9,14 @@ const request = require('request');
 const app = express();
 const uuid = require('uuid');
 const xlsxtojson = require('xlsx-to-json-lc');
+var promise = require('bluebird');
+var options = {
+    // Initialization Options
+    promiseLib: promise
+};
+var pgp = require('pg-promise')(options);
+var db=pgp(process.env.DATABASE_URL);
+
 
 
 // Messenger API parameters
@@ -178,38 +186,41 @@ function handleApiAiResponse(sender, response) {
 	let text="";
 
 	if(intentName==="projet_fonction"){
-		let fonction;
-		let projet;
-		let fonction1=response.result.parameters.fonction1;
-        let fonction2=response.result.parameters.fonction2;
-        let fonction3=response.result.parameters.fonction3;
-        let projet1=response.result.parameters.projet1;
-        let projet2=response.result.parameters.projet2;
-        let projet3=response.result.parameters.projet3;
-        if (fonction2==="" && fonction3===""){
-            fonction=fonction1;
-		}else if (fonction3===""){
-            fonction=fonction1+" "+fonction2;
-		}else {
-            fonction=fonction1+" "+fonction2+" "+fonction3;
-		}
-		if (projet2==="" && projet3===""){
-            projet=projet1;
-		}else if (projet3===""){
-            projet=projet1+" "+projet2;
-		}else {
-            projet=projet1+" "+projet2+" "+projet3;
-		}
-		for (var i in exjson){
-			if (exjson[i].projet===projet && exjson[i].fonction===fonction){
-				text=text+exjson[i].personne+" ";
-			}
-		}
-		if (text===""){
-			responses="Vous pouvez récrire votre question?";
-		}else {
-			responses=text;
-		}
+        let fonction;
+        let projet;
+        let fonction1 = response.result.parameters.fonction1;
+        let fonction2 = response.result.parameters.fonction2;
+        let fonction3 = response.result.parameters.fonction3;
+        let projet1 = response.result.parameters.projet1;
+        let projet2 = response.result.parameters.projet2;
+        let projet3 = response.result.parameters.projet3;
+        if (fonction2 === "" && fonction3 === "") {
+            fonction = fonction1;
+        } else if (fonction3 === "") {
+            fonction = fonction1 + " " + fonction2;
+        } else {
+            fonction = fonction1 + " " + fonction2 + " " + fonction3;
+        }
+        if (projet2 === "" && projet3 === "") {
+            projet = projet1;
+        } else if (projet3 === "") {
+            projet = projet1 + " " + projet2;
+        } else {
+            projet = projet1 + " " + projet2 + " " + projet3;
+        }
+        db.any(`SELECT personne FROM projet WHERE projet='${projet}' AND fonction='${fonction}'`)
+            .then(data => {
+                for (var i in data){
+                    text=text+data[i].personne+" ";
+                }
+                if (isDefined(action)) {
+                    handleApiAiAction(sender, action, text, contexts, parameters);
+                }
+
+            })
+            .catch(error =>{
+                console.log('ERROR:', error);
+            });
 	}else if(intentName==="projet"){
 		let projet;
 		let projet1=response.result.parameters.projet1;
