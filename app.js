@@ -270,13 +270,7 @@ function handleApiAiResponse(sender, response) {
             });
 	}
 	else {
-        if (isDefined(action)) {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
-        }
-        else {
-            handleApiAiAction(sender, action, config.messageError, contexts, parameters);
-		}
-
 	}
 
 	sendTypingOff(sender);
