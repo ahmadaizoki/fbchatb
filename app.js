@@ -1,20 +1,19 @@
 'use strict';
 
-const apiai = require('apiai');
-const config = require('./config');
-const express = require('express');
-const crypto = require('crypto');
-const bodyParser = require('body-parser');
-const request = require('request');
+const apiai = require('apiai');  //pour se connecter avec l'api.ai
+const config = require('./config');  //l'access au fichier de configuration
+const express = require('express');  //framework pour developper les applications web
+const crypto = require('crypto');  //framwork pour verifier l'autourisation
+const bodyParser = require('body-parser');  //framework pour créer des middlewares
+const request = require('request');  //framework pour faire des http calls
 const app = express();
-const uuid = require('uuid');
-var promise = require('bluebird');
+const uuid = require('uuid');  //framework pour générer  RFC4122 UUIDS
+var promise = require('bluebird');  //framework pour utuliser les promises
 var options = {
-    // Initialization Options
     promiseLib: promise
 };
-var pgp = require('pg-promise')(options);
-var db=pgp(process.env.DATABASE_URL);
+var pgp = require('pg-promise')(options);  //pour se connecter a la base de données
+var db=pgp(process.env.DATABASE_URL);  //se connecter a la base de donnée
 
 
 
@@ -42,37 +41,34 @@ app.set('port', (process.env.PORT || 5000))
 
 
 
-//verify request came from facebook
+//verify la request qui arrive de facebook
 app.use(bodyParser.json({
 	verify: verifyRequestSignature
 }));
 
-//serve static files in the public directory
-app.use(express.static('public'));
-
-// Process application/x-www-form-urlencoded
+// Process l'application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
 	extended: false
 }))
 
-// Process application/json
+// Process l'application/json
 app.use(bodyParser.json())
 
 
 
-
+//choisir la langue et la source de request
 const apiAiService = apiai(config.API_AI_CLIENT_ACCESS_TOKEN, {
 	language: "fr",
 	requestSource: "fb"
 });
 const sessionIds = new Map();
 
-// Index route
+// l'idex route
 app.get('/', function (req, res) {
 	res.send('Salut tout le monde, moi le chatbot')
 })
 
-// for Facebook verification
+// verifier la connecxion avec facebook
 app.get('/webhook/', function (req, res) {
 	console.log("request");
 	if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === config.FB_VERIFY_TOKEN) {
@@ -83,28 +79,21 @@ app.get('/webhook/', function (req, res) {
 	}
 })
 
-/*
- * All callbacks for Messenger are POST-ed. They will be sent to the same
- * webhook. Be sure to subscribe your app to your page to receive callbacks
- * for your page. 
- * https://developers.facebook.com/docs/messenger-platform/product-overview/setup#subscribe_app
- *
- */
 app.post('/webhook/', function (req, res) {
 	var data = req.body;
 	console.log(JSON.stringify(data));
 
 
 
-	// Make sure this is a page subscription
+	// Verifier que c'est une facebook page
 	if (data.object == 'page') {
-		// Iterate over each entry
-		// There may be multiple if batched
+
+		//Pour chaque page entrée
 		data.entry.forEach(function (pageEntry) {
 			var pageID = pageEntry.id;
 			var timeOfEvent = pageEntry.time;
 
-			// Iterate over each messaging event
+			// Repeter pour chaque evenement
 			pageEntry.messaging.forEach(function (messagingEvent) {
 				if (messagingEvent.optin) {
 					receivedAuthentication(messagingEvent);
@@ -118,15 +107,14 @@ app.post('/webhook/', function (req, res) {
 			});
 		});
 
-		// Assume all went well.
-		// You must send back a 200, within 20 seconds
+		// Envoyer la code 200 qui signifie que tout va bien dans moins de 20 seconds
 		res.sendStatus(200);
 	}
 });
 
 
 
-
+//Gerer le message recevoir de facebook messenger
 
 function receivedMessage(event) {
 
@@ -138,13 +126,12 @@ function receivedMessage(event) {
 	if (!sessionIds.has(senderID)) {
 		sessionIds.set(senderID, uuid.v1());
 	}
-	//console.log("Received message for user %d and page %d at %d with message:", senderID, recipientID, timeOfMessage);
-	//console.log(JSON.stringify(message));
+
 	var messageText = message.text;
 
 
 	if (messageText) {
-		//send message to api.ai
+		//Envoyer la message vers api.ai
 		sendToApiAi(senderID, messageText);
 	}
 }
@@ -152,7 +139,7 @@ function receivedMessage(event) {
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 	switch (action) {
 		default:
-			//unhandled action, just send back the text
+			//Si l'action existe pas envoie la text default
 			sendTextMessage(sender, responseText);
 	}
 }
@@ -165,6 +152,7 @@ function handleMessage(message, sender) {
 	}
 }
 
+//Recupirer les informations dans la reponse d'api.ai
 function handleApiAiResponse(sender, response) {
 	let responseText = response.result.fulfillment.speech;
 	let action = response.result.action;
@@ -173,6 +161,7 @@ function handleApiAiResponse(sender, response) {
 	let intentName=response.result.metadata.intentName;
 	let text="";
 
+	//Traiter la reponse pour chaque intent dans l'api.ai
 	if(intentName==="projet_fonction"){
         let fonction;
         let projet;
@@ -338,7 +327,6 @@ function handleApiAiResponse(sender, response) {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
 	}
 
-	//sendTypingOff(sender);
 
 }
 
@@ -361,7 +349,7 @@ function sendToApiAi(sender, text) {
 
 
 
-
+//Envoyer la reponse vers facebook messenger
 function sendTextMessage(recipientId, text) {
 	var messageData = {
 		recipient: {
@@ -374,10 +362,7 @@ function sendTextMessage(recipientId, text) {
 	callSendAPI(messageData);
 }
 
-/*
- * Turn typing indicator on
- *
- */
+//Set l'écrire sur facebook on
 function sendTypingOn(recipientId) {
 
 
@@ -391,10 +376,7 @@ function sendTypingOn(recipientId) {
 	callSendAPI(messageData);
 }
 
-/*
- * Turn typing indicator off
- *
- */
+//Set l'écrire sur facebook off
 function sendTypingOff(recipientId) {
 
 
@@ -408,11 +390,7 @@ function sendTypingOff(recipientId) {
 	callSendAPI(messageData);
 }
 
-/*
- * Call the Send API. The message data goes in the body. If successful, we'll 
- * get the message id in a response 
- *
- */
+//traiter la connexion avec l'api.ai
 function callSendAPI(messageData) {
 	request({
 		uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -440,18 +418,11 @@ function callSendAPI(messageData) {
 	});
 }
 
-/*
- * Message Read Event
- *
- * This event is called when a previously-sent message has been read.
- * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-read
- * 
- */
+//L'evenement pour lire le message
 function receivedMessageRead(event) {
 	var senderID = event.sender.id;
 	var recipientID = event.recipient.id;
 
-	// All messages before watermark (a timestamp) or sequence have been seen.
 	var watermark = event.read.watermark;
 	var sequenceNumber = event.read.seq;
 
@@ -459,43 +430,22 @@ function receivedMessageRead(event) {
 		"number %d", watermark, sequenceNumber);
 }
 
-/*
- * Authorization Event
- *
- * The value for 'optin.ref' is defined in the entry point. For the "Send to 
- * Messenger" plugin, it is the 'data-ref' field. Read more at 
- * https://developers.facebook.com/docs/messenger-platform/webhook-reference/authentication
- *
- */
+// Recevoir l'autourisation
 function receivedAuthentication(event) {
 	var senderID = event.sender.id;
 	var recipientID = event.recipient.id;
 	var timeOfAuth = event.timestamp;
 
-	// The 'ref' field is set in the 'Send to Messenger' plugin, in the 'data-ref'
-	// The developer can set this to an arbitrary value to associate the 
-	// authentication callback with the 'Send to Messenger' click event. This is
-	// a way to do account linking when the user clicks the 'Send to Messenger' 
-	// plugin.
 	var passThroughParam = event.optin.ref;
 
 	console.log("Recevoir authentication pour l'utulisateur %d et la page %d avec mot de pass " +
 		"parle param '%s' en %d", senderID, recipientID, passThroughParam,
 		timeOfAuth);
 
-	// When an authentication is received, we'll send a message back to the sender
-	// to let them know it was successful.
 	sendTextMessage(senderID, "Authentication ok");
 }
 
-/*
- * Verify that the callback came from Facebook. Using the App Secret from 
- * the App Dashboard, we can verify the signature that is sent with each 
- * callback in the x-hub-signature field, located in the header.
- *
- * https://developers.facebook.com/docs/graph-api/webhooks#setup
- *
- */
+//Verifier la signature pour chaque request qu'il vient de facebbok et qu'il utulise la meme code secrets
 function verifyRequestSignature(req, res, buf) {
 	var signature = req.headers["x-hub-signature"];
 
@@ -516,6 +466,7 @@ function verifyRequestSignature(req, res, buf) {
 	}
 }
 
+//Si l'action est définie ou pas définie
 function isDefined(obj) {
 	if (typeof obj == 'undefined') {
 		return false;
@@ -528,7 +479,7 @@ function isDefined(obj) {
 	return obj != null;
 }
 
-// Spin up the server
+// Connéxion au serveur
 app.listen(app.get('port'), function () {
 	console.log('Sur la port', app.get('port'))
 })
