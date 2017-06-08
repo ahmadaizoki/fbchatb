@@ -20,19 +20,19 @@ var db=pgp(process.env.DATABASE_URL);
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
-	throw new Error('missing FB_PAGE_TOKEN');
+	throw new Error('FB_PAGE_TOKEN vide');
 }
 if (!config.FB_VERIFY_TOKEN) {
-	throw new Error('missing FB_VERIFY_TOKEN');
+	throw new Error('FB_VERIFY_TOKEN vide');
 }
 if (!config.API_AI_CLIENT_ACCESS_TOKEN) {
-	throw new Error('missing API_AI_CLIENT_ACCESS_TOKEN');
+	throw new Error('API_AI_CLIENT_ACCESS_TOKEN vide');
 }
 if (!config.FB_APP_SECRET) {
-	throw new Error('missing FB_APP_SECRET');
+	throw new Error('FB_APP_SECRET vide');
 }
 if (!config.SERVER_URL) { //used for ink to static files
-	throw new Error('missing SERVER_URL');
+	throw new Error('SERVER_URL vide');
 }
 
 
@@ -69,7 +69,7 @@ const sessionIds = new Map();
 
 // Index route
 app.get('/', function (req, res) {
-	res.send('Hello world, I am a chat bot')
+	res.send('Salut tout le monde, moi le chatbot')
 })
 
 // for Facebook verification
@@ -78,7 +78,7 @@ app.get('/webhook/', function (req, res) {
 	if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === config.FB_VERIFY_TOKEN) {
 		res.status(200).send(req.query['hub.challenge']);
 	} else {
-		console.error("Failed validation. Make sure the validation tokens match.");
+		console.error("Echec de validation.");
 		res.sendStatus(403);
 	}
 })
@@ -113,7 +113,7 @@ app.post('/webhook/', function (req, res) {
 				} else if (messagingEvent.read) {
 					receivedMessageRead(messagingEvent);
 				} else {
-					console.log("Webhook received unknown messagingEvent: ", messagingEvent);
+					console.log("Webhook recevoir non existe evenement: ", messagingEvent);
 				}
 			});
 		});
@@ -292,7 +292,7 @@ function handleApiAiResponse(sender, response) {
                 }
             })
             .catch(error =>{
-                console.log('ERROR111:', error);
+                console.log('ERROR:', error);
             });
     } else if (intentName==="date") {
         let jalon;
@@ -332,7 +332,7 @@ function handleApiAiResponse(sender, response) {
 
             })
             .catch(error => {
-                console.log('ERROR111:', error);
+                console.log('ERROR:', error);
             });
     } else {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
@@ -428,14 +428,14 @@ function callSendAPI(messageData) {
 			var messageId = body.message_id;
 
 			if (messageId) {
-				console.log("Successfully sent message with id %s to recipient %s",
+				console.log("Envoyer message avec id %s pour %s",
 					messageId, recipientId);
 			} else {
-				console.log("Successfully called Send API for recipient %s",
+				console.log("Réussir la connection avec l'API %s",
 					recipientId);
 			}
 		} else {
-			console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+			console.error("Echec de connection avec API", response.statusCode, response.statusMessage, body.error);
 		}
 	});
 }
@@ -455,7 +455,7 @@ function receivedMessageRead(event) {
 	var watermark = event.read.watermark;
 	var sequenceNumber = event.read.seq;
 
-	console.log("Received message read event for watermark %d and sequence " +
+	console.log("Recevoir message de lire pour watermark %d et sequence " +
 		"number %d", watermark, sequenceNumber);
 }
 
@@ -479,13 +479,13 @@ function receivedAuthentication(event) {
 	// plugin.
 	var passThroughParam = event.optin.ref;
 
-	console.log("Received authentication for user %d and page %d with pass " +
-		"through param '%s' at %d", senderID, recipientID, passThroughParam,
+	console.log("Recevoir authentication pour l'utulisateur %d et la page %d avec mot de pass " +
+		"parle param '%s' en %d", senderID, recipientID, passThroughParam,
 		timeOfAuth);
 
 	// When an authentication is received, we'll send a message back to the sender
 	// to let them know it was successful.
-	sendTextMessage(senderID, "Authentication successful");
+	sendTextMessage(senderID, "Authentication ok");
 }
 
 /*
@@ -500,7 +500,7 @@ function verifyRequestSignature(req, res, buf) {
 	var signature = req.headers["x-hub-signature"];
 
 	if (!signature) {
-		throw new Error('Couldn\'t validate the signature.');
+		throw new Error('Echec validation de signature.');
 	} else {
 		var elements = signature.split('=');
 		var method = elements[0];
@@ -511,7 +511,7 @@ function verifyRequestSignature(req, res, buf) {
 			.digest('hex');
 
 		if (signatureHash != expectedHash) {
-			throw new Error("Couldn't validate the request signature.");
+			throw new Error("Echec validation de request signature.");
 		}
 	}
 }
@@ -530,5 +530,5 @@ function isDefined(obj) {
 
 // Spin up the server
 app.listen(app.get('port'), function () {
-	console.log('running on port', app.get('port'))
+	console.log('Sur la port', app.get('port'))
 })
