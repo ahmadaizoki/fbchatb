@@ -161,6 +161,15 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 			sendQuickReply(sender,responseText,replies);
 			break;
 
+		case "position":
+			let replies=[
+				{
+					"content_type"="location",
+				}
+			];
+			sendQuickReply(sender,responseText,replies);
+			break;
+
 		default:
 			//Si l'action existe pas envoie la text default
 			sendTextMessage(sender, responseText);
