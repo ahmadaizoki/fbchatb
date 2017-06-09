@@ -358,7 +358,9 @@ function handleApiAiResponse(sender, response) {
                 console.log('ERROR:', error);
             });
     } else if (intentName==='fuck'){
-      sendGifMessage(sender);
+        sendGifMessage(sender);
+    } else if (intentName==='parle'){
+        sendAudioMessage(sender);
     } else {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
 	}
@@ -599,6 +601,25 @@ function sendGifMessage(recipientId) {
                 type: "image",
                 payload: {
                     url: config.SERVER_URL + "/GIF/pardon.gif"
+                }
+            }
+        }
+    };
+
+    callSendAPI(messageData);
+}
+
+//Envoyer un message vocale
+function sendAudioMessage(recipientId) {
+    var messageData = {
+        recipient: {
+            id: recipientId
+        },
+        message: {
+            attachment: {
+                type: "audio",
+                payload: {
+                    url: config.SERVER_URL + "/audio/sample.mp3"
                 }
             }
         }
