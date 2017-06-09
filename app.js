@@ -164,7 +164,7 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 		case "position":
 			let replies=[
 				{
-					"content_type"="location",
+					"content_type":"location",
 				}
 			];
 			sendQuickReply(sender,responseText,replies);
