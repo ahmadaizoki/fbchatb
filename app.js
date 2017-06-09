@@ -578,6 +578,10 @@ function receivedPostback(event) {
 			greetUserText(senderID);
 			break;
 
+        case "music":
+            sendAudioMessage(senderID);
+            break;
+
         default:
             //unindentified payload
             sendTextMessage(senderID, "I'm not sure what you want. Can you be more specific?");
