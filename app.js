@@ -103,7 +103,9 @@ app.post('/webhook/', function (req, res) {
 					receivedMessage(messagingEvent);
 				} else if (messagingEvent.read) {
 					receivedMessageRead(messagingEvent);
-				} else {
+				} else if (messagingEvent.postback) {
+                    receivedPostback(messagingEvent);
+                } else {
 					console.log("Webhook recevoir non existe evenement: ", messagingEvent);
 				}
 			});
@@ -525,6 +527,63 @@ function sendQuickReply(recipientId, text, replies, metadata) {
     };
 
     callSendAPI(messageData);
+}
+
+//Recuperer les Informations d'un utilisateur facebook
+function greetUserText(userId) {
+    //Lire le nom d'utilisateur
+    request({
+        uri: 'https://graph.facebook.com/v2.7/' + userId,
+        qs: {
+            access_token: config.FB_PAGE_TOKEN
+        }
+
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+
+            var user = JSON.parse(body);
+
+            if (user.first_name) {
+                console.log("FB utilisateur: %s %s, %s",
+                    user.first_name, user.last_name, user.gender);
+
+                sendTextMessage(userId, "Bienvenue " + user.first_name + '!');
+            } else {
+                console.log("Je peux pas recuperer les info d'id",
+                    userId);
+            }
+        } else {
+            console.error(response.error);
+        }
+
+    });
+}
+
+//Gerer les Postback event
+function receivedPostback(event) {
+    var senderID = event.sender.id;
+    var recipientID = event.recipient.id;
+    var timeOfPostback = event.timestamp;
+
+    // The 'payload' param is a developer-defined field which is set in a postback
+    // button for Structured Messages.
+    var payload = event.postback.payload;
+
+    switch (payload) {
+		case "Get_STARTED":
+			greetUserText(senderID);
+			break;
+
+        default:
+            //unindentified payload
+            sendTextMessage(senderID, "I'm not sure what you want. Can you be more specific?");
+            break;
+
+    }
+
+    console.log("Received postback for user %d and page %d with payload '%s' " +
+        "at %d", senderID, recipientID, payload, timeOfPostback);
+
 }
 
 // Connéxion au serveur
