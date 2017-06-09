@@ -598,7 +598,7 @@ function sendGifMessage(recipientId) {
             attachment: {
                 type: "image",
                 payload: {
-                    url: config.SERVER_URL + "/assets/instagram_logo.gif"
+                    url: config.SERVER_URL + "public/assets/instagram_logo.gif"
                 }
             }
         }
