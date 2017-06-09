@@ -4,7 +4,7 @@ const apiai = require('apiai');  //pour se connecter avec l'api.ai
 const config = require('./config');  //l'access au fichier de configuration
 const express = require('express');  //framework pour developper les applications web
 const crypto = require('crypto');  //framwork pour verifier l'autourisation
-const bodyParser = require('body-parser');  //framework pour créer des middlewares
+const bodyParser = require('body-parser');  //framework pour créer des middlewares pour parser les requests données
 const request = require('request');  //framework pour faire des http calls
 const app = express();
 const uuid = require('uuid');  //framework pour générer  RFC4122 UUIDS
@@ -54,6 +54,8 @@ app.use(bodyParser.urlencoded({
 // Process l'application/json
 app.use(bodyParser.json())
 
+//public dossier
+app.use(express.static('public'));
 
 
 //choisir la langue et la source de request
@@ -138,6 +140,27 @@ function receivedMessage(event) {
 
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 	switch (action) {
+		case "smalltalk.greetings.hello":
+			let replies=[
+				{
+					"content_type":"text",
+					"title":"Chercher par le nom de projet et la fonction",
+					"payload":"projet_fonction"
+				},
+				{
+                    "content_type":"text",
+                    "title":"Chercher par le nom de projet",
+                    "payload":"projet"
+				},
+                {
+                    "content_type":"text",
+                    "title":"Chercher par le nom,prénom de personne",
+                    "payload":"personne"
+                },
+			];
+			sendQuickReply(sender,responseText,replies);
+			break;
+
 		default:
 			//Si l'action existe pas envoie la text default
 			sendTextMessage(sender, responseText);
@@ -477,6 +500,22 @@ function isDefined(obj) {
 	}
 
 	return obj != null;
+}
+
+//Envoyer des messages avec des QuickReplay
+function sendQuickReply(recipientId, text, replies, metadata) {
+    var messageData = {
+        recipient: {
+            id: recipientId
+        },
+        message: {
+            text: text,
+            metadata: isDefined(metadata)?metadata:'',
+            quick_replies: replies
+        }
+    };
+
+    callSendAPI(messageData);
 }
 
 // Connéxion au serveur
