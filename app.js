@@ -144,17 +144,17 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 			let replies=[
 				{
 					"content_type":"text",
-					"title":"Chercher par le nom de projet et la fonction",
+					"title":"Projet & Fonction",
 					"payload":"projet_fonction"
 				},
 				{
                     "content_type":"text",
-                    "title":"Chercher par le nom de projet",
+                    "title":"Projet",
                     "payload":"projet"
 				},
                 {
                     "content_type":"text",
-                    "title":"Chercher par le nom,prénom de personne",
+                    "title":"Personne",
                     "payload":"personne"
                 },
 			];
