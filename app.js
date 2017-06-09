@@ -357,6 +357,8 @@ function handleApiAiResponse(sender, response) {
             .catch(error => {
                 console.log('ERROR:', error);
             });
+    } else if (intentName==='fuck'){
+      sendGifMessage(sender);
     } else {
             handleApiAiAction(sender, action, responseText, contexts, parameters);
 	}
@@ -584,6 +586,25 @@ function receivedPostback(event) {
     console.log("Received postback for user %d and page %d with payload '%s' " +
         "at %d", senderID, recipientID, payload, timeOfPostback);
 
+}
+
+//Envoyer un Gif message
+function sendGifMessage(recipientId) {
+    var messageData = {
+        recipient: {
+            id: recipientId
+        },
+        message: {
+            attachment: {
+                type: "image",
+                payload: {
+                    url: config.SERVER_URL + "/assets/instagram_logo.gif"
+                }
+            }
+        }
+    };
+
+    callSendAPI(messageData);
 }
 
 // Connéxion au serveur
