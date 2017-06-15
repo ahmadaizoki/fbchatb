@@ -2,18 +2,18 @@
 
 const apiai = require('apiai');  //pour se connecter avec l'api.ai
 const config = require('./config');  //l'access au fichier de configuration
-const express = require('express');  //framework pour developper les applications web
+const express = require('express');  //framework pour développer les applications web
 const crypto = require('crypto');  //framwork pour verifier l'autourisation
 const bodyParser = require('body-parser');  //framework pour créer des middlewares pour parser les requests données
 const request = require('request');  //framework pour faire des http calls
 const app = express();
 const uuid = require('uuid');  //framework pour générer  RFC4122 UUIDS
-var promise = require('bluebird');  //framework pour utuliser les promises
+var promise = require('bluebird');  //framework pour utiliser les promises
 var options = {
     promiseLib: promise
 };
 var pgp = require('pg-promise')(options);  //pour se connecter a la base de données
-var db=pgp(process.env.DATABASE_URL);  //se connecter a la base de donnée
+var db=pgp(process.env.DATABASE_URL);  //se connecter a la base de données
 
 
 
@@ -575,10 +575,12 @@ function receivedPostback(event) {
 
     switch (payload) {
 		case "Get_STARTED":
+		    //Salutation message
 			greetUserText(senderID);
 			break;
 
         case "music":
+            //vocale message
             sendAudioMessage(senderID);
             break;
 
